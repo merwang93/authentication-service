@@ -2,7 +2,7 @@ pipeline {
     agent any
     tools {
         maven 'M3'
-        jdk 'jdk17'
+        jdk 'jdk21'
     }
     options {
         skipStagesAfterUnstable()
@@ -17,19 +17,19 @@ pipeline {
         //}
         stage ('Build') {
             steps {
-                bat 'mvn clean compile'
+                sh 'mvn clean compile'
             }
         }
         stage ('Scan SonarQube') {
             steps {
                 withSonarQubeEnv(installationName:'SonarQube'){
-                    bat 'mvn clean install sonar:sonar'
+                    sh 'mvn clean install sonar:sonar'
                 }
             }
         }
         stage ('Test') {
             steps {
-                bat 'mvn -Dmaven.test.failure.ignore=true clean install'
+                sh 'mvn -Dmaven.test.failure.ignore=true clean install'
             }
         }
         stage('Deploy') {
